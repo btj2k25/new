@@ -1,0 +1,64 @@
+# Application name
+spring.application.name={{artifactId}}
+
+# Server configuration
+server.port=8080
+
+{{#if database.type}}
+# Database configuration
+{{#if_eq database.type "postgresql"}}
+spring.datasource.url={{database.options.url}}
+spring.datasource.username={{database.options.username}}
+spring.datasource.password={{database.options.password}}
+spring.datasource.driver-class-name=org.postgresql.Driver
+{{/if_eq}}
+{{#if_eq database.type "mysql"}}
+spring.datasource.url={{database.options.url}}
+spring.datasource.username={{database.options.username}}
+spring.datasource.password={{database.options.password}}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+{{/if_eq}}
+{{#if_eq database.type "mongodb"}}
+spring.data.mongodb.uri={{database.options.url}}
+spring.data.mongodb.database={{database.options.name}}
+{{#if database.options.username}}spring.data.mongodb.username={{database.options.username}}{{/if}}
+{{#if database.options.password}}spring.data.mongodb.password={{database.options.password}}{{/if}}
+{{/if_eq}}
+{{#if_eq database.type "h2"}}
+spring.datasource.url=jdbc:h2:mem:{{database.options.name}}
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username={{database.options.username}}
+spring.datasource.password={{database.options.password}}
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+{{/if_eq}}
+{{#if_eq database.type "oracle"}}
+spring.datasource.url={{database.options.url}}
+spring.datasource.username={{database.options.username}}
+spring.datasource.password={{database.options.password}}
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+{{/if_eq}}
+{{#if_eq database.type "mssql"}}
+spring.datasource.url={{database.options.url}}
+spring.datasource.username={{database.options.username}}
+spring.datasource.password={{database.options.password}}
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+{{/if_eq}}
+
+# JPA configuration
+{{#if_ne database.type "mongodb"}}
+spring.jpa.hibernate.ddl-auto={{#if database.options.generateDdl}}update{{else}}none{{/if}}
+spring.jpa.show-sql={{database.options.showSql}}
+{{#if database.options.connectionPool}}spring.datasource.hikari.maximum-pool-size=10{{/if}}
+{{/if_ne}}
+{{/if}}
+
+{{#if_eq generationOptions.documentation "swagger"}}
+# Swagger configuration
+springfox.documentation.swagger.v2.path=/api-docs
+{{/if_eq}}
+{{#if_eq generationOptions.documentation "springdoc"}}
+# SpringDoc configuration
+springdoc.api-docs.path=/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+{{/if_eq}}

@@ -1,0 +1,95 @@
+package {{packageName}}.entity;
+
+{{#if isMongoDb}}
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+{{#if hasTimestamps}}
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+{{/if}}
+{{else}}
+import javax.persistence.*;
+{{#if hasTimestamps}}
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+{{/if}}
+{{/if}}
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+
+{{#if hasLombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/if}}
+
+{{#if isMongoDb}}
+@Document("{{collectionName}}")
+{{else}}
+@Entity
+{{#if tableName}}@Table(name = "{{tableName}}"){{/if}}
+{{/if}}
+{{#if hasLombok}}
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+{{/if}}
+public class {{entityName}} {
+    
+    {{#each fields}}
+    {{#if constraints}}
+    {{#each constraints}}
+    {{this}}
+    {{/each}}
+    {{/if}}
+    private {{type}} {{name}};
+    
+    {{/each}}
+    
+    {{#each relationships}}
+    {{relationshipAnnotation}}
+    {{#if joinColumn}}
+    @JoinColumn(name = "{{joinColumn}}")
+    {{/if}}
+    {{#if joinTable}}
+    @JoinTable(
+        name = "{{joinTable}}",
+        joinColumns = @JoinColumn(name = "{{joinColumn}}"),
+        inverseJoinColumns = @JoinColumn(name = "{{inverseJoinColumn}}")
+    )
+    {{/if}}
+    private {{typeWithField}} {{fieldName}};
+    
+    {{/each}}
+
+    {{#unless hasLombok}}
+    // Getters and Setters
+    {{#each fields}}
+    public {{type}} get{{capitalize name}}() {
+        return {{name}};
+    }
+
+    public void set{{capitalize name}}({{type}} {{name}}) {
+        this.{{name}} = {{name}};
+    }
+    
+    {{/each}}
+    
+    {{#each relationships}}
+    public {{typeOnly}} get{{capitalize fieldName}}() {
+        return {{fieldName}};
+    }
+
+    public void set{{capitalize fieldName}}({{typeOnly}} {{fieldName}}) {
+        this.{{fieldName}} = {{fieldName}};
+    }
+    
+    {{/each}}
+    {{/unless}}
+}

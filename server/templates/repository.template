@@ -1,0 +1,18 @@
+package {{packageName}}.repository;
+
+{{#if isMongoDb}}
+import org.springframework.data.mongodb.repository.MongoRepository;
+{{else}}
+import org.springframework.data.jpa.repository.JpaRepository;
+{{/if}}
+import {{packageName}}.entity.{{entityName}};
+import org.springframework.stereotype.Repository;
+
+@Repository
+{{#if isMongoDb}}
+public interface {{entityName}}Repository extends MongoRepository<{{entityName}}, {{idType}}> {
+{{else}}
+public interface {{entityName}}Repository extends JpaRepository<{{entityName}}, {{idType}}> {
+{{/if}}
+    // Add custom query methods here
+}

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>{{springBootVersion}}</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>{{groupId}}</groupId>
+	<artifactId>{{artifactId}}</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>{{name}}</name>
+	<description>{{description}}</description>
+	<packaging>{{packageType}}</packaging>
+	
+	<properties>
+		<java.version>{{javaVersion}}</java.version>
+	</properties>
+	
+	<dependencies>
+		{{#each dependencies}}
+		{{#if selected}}
+		<!-- {{name}} -->
+		{{#if_eq id "web"}}
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq id "jpa"}}
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq id "security"}}
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq id "actuator"}}
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq id "devtools"}}
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq id "lombok"}}
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		{{/if_eq}}
+		{{/if}}
+		{{/each}}
+		
+		<!-- Database dependencies -->
+		{{#if database.type}}
+		{{#if_eq database.type "postgresql"}}
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq database.type "mysql"}}
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq database.type "mongodb"}}
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq database.type "h2"}}
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq database.type "oracle"}}
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq database.type "mssql"}}
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		{{/if_eq}}
+		{{/if}}
+		
+		<!-- Documentation dependencies -->
+		{{#if_eq generationOptions.documentation "swagger"}}
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		{{/if_eq}}
+		{{#if_eq generationOptions.documentation "springdoc"}}
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.15</version>
+		</dependency>
+		{{/if_eq}}
+		
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				{{#if hasLombok}}
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+				{{/if}}
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

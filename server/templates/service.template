@@ -1,0 +1,44 @@
+package {{packageName}}.service;
+
+import {{packageName}}.entity.{{entityName}};
+import {{packageName}}.repository.{{entityName}}Repository;
+{{#if hasDtos}}
+import {{packageName}}.dto.{{entityName}}Dto;
+{{/if}}
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class {{entityName}}Service {
+
+    private final {{entityName}}Repository {{entityNameLower}}Repository;
+
+    @Autowired
+    public {{entityName}}Service({{entityName}}Repository {{entityNameLower}}Repository) {
+        this.{{entityNameLower}}Repository = {{entityNameLower}}Repository;
+    }
+
+    public List<{{entityName}}> findAll() {
+        return {{entityNameLower}}Repository.findAll();
+    }
+
+    public Optional<{{entityName}}> findById({{idType}} id) {
+        return {{entityNameLower}}Repository.findById(id);
+    }
+
+    public {{entityName}} save({{entityName}} {{entityNameLower}}) {
+        return {{entityNameLower}}Repository.save({{entityNameLower}});
+    }
+
+    public boolean existsById({{idType}} id) {
+        return {{entityNameLower}}Repository.existsById(id);
+    }
+
+    public void deleteById({{idType}} id) {
+        {{entityNameLower}}Repository.deleteById(id);
+    }
+}

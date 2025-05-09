@@ -1,0 +1,64 @@
+package {{packageName}}.controller;
+
+import {{packageName}}.entity.{{entityName}};
+import {{packageName}}.service.{{entityName}}Service;
+{{#if hasDtos}}
+import {{packageName}}.dto.{{entityName}}Dto;
+{{/if}}
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/{{entityNameLower}}")
+public class {{entityName}}Controller {
+
+    private final {{entityName}}Service {{entityNameLower}}Service;
+
+    @Autowired
+    public {{entityName}}Controller({{entityName}}Service {{entityNameLower}}Service) {
+        this.{{entityNameLower}}Service = {{entityNameLower}}Service;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<{{entityName}}>> getAll{{entityName}}s() {
+        List<{{entityName}}> {{entityNameLower}}s = {{entityNameLower}}Service.findAll();
+        return new ResponseEntity<>({{entityNameLower}}s, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<{{entityName}}> get{{entityName}}ById(@PathVariable {{idType}} id) {
+        Optional<{{entityName}}> {{entityNameLower}} = {{entityNameLower}}Service.findById(id);
+        return {{entityNameLower}}.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping
+    public ResponseEntity<{{entityName}}> create{{entityName}}(@RequestBody {{entityName}} {{entityNameLower}}) {
+        {{entityName}} created{{entityName}} = {{entityNameLower}}Service.save({{entityNameLower}});
+        return new ResponseEntity<>(created{{entityName}}, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<{{entityName}}> update{{entityName}}(@PathVariable {{idType}} id, @RequestBody {{entityName}} {{entityNameLower}}) {
+        if (!{{entityNameLower}}Service.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        {{entityName}} updated{{entityName}} = {{entityNameLower}}Service.save({{entityNameLower}});
+        return new ResponseEntity<>(updated{{entityName}}, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete{{entityName}}(@PathVariable {{idType}} id) {
+        if (!{{entityNameLower}}Service.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        {{entityNameLower}}Service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}

@@ -1,0 +1,19 @@
+package {{packageName}};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+{{#if_eq generationOptions.documentation "swagger"}}
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+{{/if_eq}}
+
+@SpringBootApplication
+{{#if_eq generationOptions.documentation "swagger"}}
+@EnableSwagger2
+{{/if_eq}}
+public class {{applicationClassName}} {
+
+    public static void main(String[] args) {
+        SpringApplication.run({{applicationClassName}}.class, args);
+    }
+
+}
